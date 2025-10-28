@@ -27,7 +27,7 @@
 
 ## 项目配置
 
-- **服务器名称**：video_server
+- **服务器名称**：mcp-video-server
 - **协议**：http
 - **默认端口**：5005
 - **模拟视频服务器地址**：http://localhost:8001
@@ -227,6 +227,8 @@ mcp_video_server/
 
 ### 构建独立可执行文件
 
+#### Windows 环境
+
 ```powershell
 # 使用 PowerShell 构建（推荐）
 .\build.ps1
@@ -235,17 +237,92 @@ mcp_video_server/
 .\build.bat
 ```
 
+#### Linux 环境
+
+```bash
+# 赋予脚本执行权限
+chmod +x build_linux.sh
+
+# 运行构建脚本
+./build_linux.sh
+```
+
 构建输出：
-- `dist/video_server-mcp-server.exe`：独立可执行文件
+- Windows: `dist/video_server-mcp-server.exe`：独立可执行文件
+- Linux: `dist/video_server-mcp-server`：独立可执行文件
 - `build/`：构建产物和依赖
 
 ### 分发与运行
 
 构建好的可执行文件可以在没有 Python 环境的系统上运行：
 
+#### Windows 环境
 ```powershell
 # 运行可执行文件
 .\dist\video_server-mcp-server.exe start --port 5005
+```
+
+#### Linux 环境
+```bash
+# 运行可执行文件
+./dist/video_server-mcp-server start --port 5005
+```
+
+### Docker容器化部署
+
+#### 使用Docker Compose（推荐）
+
+```bash
+# 使用docker-compose构建和启动服务
+docker-compose up -d --build
+```
+
+#### 使用Docker单独构建和运行
+
+```bash
+# 构建Docker镜像
+docker build -t mcp-video-server .
+
+# 运行Docker容器
+docker run -d --name mcp-video-server -p 5005:5005 mcp-video-server
+```
+
+#### Docker环境变量配置
+
+可以通过环境变量自定义服务配置：
+
+```bash
+docker run -d --name mcp-video-server \
+  -p 5005:5005 \
+  -e MCP_VIDEO_SERVER_PROTOCOL=http \
+  -e MCP_VIDEO_SERVER_PORT=5005 \
+  mcp-video-server
+```
+
+#### 容器日志查看
+
+```bash
+# 查看容器日志
+docker logs mcp-video-server
+
+# 实时查看日志
+docker logs -f mcp-video-server
+```
+
+#### 停止和重启容器
+
+```bash
+# 停止容器
+docker stop mcp-video-server
+
+# 启动已停止的容器
+docker start mcp-video-server
+
+# 重启容器
+docker restart mcp-video-server
+
+# 使用docker-compose停止所有服务
+docker-compose down
 ```
 
 ## 故障排除

@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  # 视频服务器MCP
+  mcp-video-server:
+    build: .
+    container_name: mcp-video-server
+    restart: always
+    ports:
+      - "5005:5005"
+    environment:
+      - MCP_VIDEO_SERVER_PROTOCOL=http
+      - MCP_VIDEO_SERVER_PORT=5005
+    volumes:
+      # 可选：挂载日志目录
+      # - ./logs:/app/logs
+    networks:
+      - mcp-network
+
+  # 模拟视频服务器
+  mock-video-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.mock
+    container_name: mock-video-server
+    restart: always
+    ports:
+      - "8001:8001"
+    networks:
+      - mcp-network
+    depends_on:
+      - mcp-video-server
+
+networks:
+  mcp-network:
+    driver: bridge
