@@ -1,0 +1,8 @@
+mcp==1.10.1
+fastapi>=0.68.0
+uvicorn>=0.15.0
+python-dotenv>=0.19.0
+# MCP Server dependencies
+mcp-server>=0.1.0
+requests>=2.31.0  # 添加requests库依赖
+pyinstaller>=6.0.0
