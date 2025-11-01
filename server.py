@@ -1,4 +1,8 @@
 import os
+from dotenv import load_dotenv
+
+# 加载.env文件中的环境变量
+load_dotenv()
 import sys
 import signal
 import threading
@@ -161,7 +165,8 @@ SERVER_MESSAGES = {
 }
 
 # API基础URL，指向模拟视频服务器
-API_BASE_URL = "http://localhost:8001"  # 根据mock_video_server.py中的配置
+# 从环境变量读取API基础URL，如果未设置则使用默认值
+API_BASE_URL = os.environ.get('MCP_VIDEO_API_BASE_URL', 'http://localhost:8001')  # 根据mock_video_server.py中的配置
 
 def format_message(key: str, **kwargs) -> str:
     """Format a server message with given parameters."""
@@ -206,7 +211,7 @@ async def get_video_devices(device_type=None, status=None, keyword=None, headers
         device_type: 设备类型过滤（可选），取值为ip_camera、nvr
         status: 设备状态过滤（可选），取值为在线用online或离线用offline
         keyword: 关键词搜索（可选）
-        headers: 请求头信息（由FastMCP框架自动传入）
+        headers: 请求头信息
     
     Returns:
         dict: 设备列表信息
@@ -242,7 +247,7 @@ async def get_device_details(device_id: str, headers=None) -> dict:
     
     Args:
         device_id: 设备ID
-        headers: 请求头信息（由FastMCP框架自动传入）
+        headers: 请求头信息
     
     Returns:
         dict: 设备详细信息
@@ -269,7 +274,7 @@ async def start_live_preview(device_id: str, stream_type: str = "main", headers=
     Args:
         device_id: 设备ID
         stream_type: 流类型（main/sub，默认main）
-        headers: 请求头信息（由FastMCP框架自动传入）
+        headers: 请求头信息
     
     Returns:
         dict: 预览URL和状态信息
@@ -309,7 +314,7 @@ async def playback_recording(device_id: str, start_time: str, end_time: str, str
         start_time: 开始时间（ISO格式）
         end_time: 结束时间（ISO格式）
         stream_type: 流类型（main/sub，默认main）
-        headers: 请求头信息（由FastMCP框架自动传入）
+        headers: 请求头信息
     
     Returns:
         dict: 回放URL和状态信息
@@ -334,7 +339,7 @@ async def playback_recording(device_id: str, start_time: str, end_time: str, str
                 "status": "success",
                 "message": "Playback started",
                 "playback_urls": {
-                    "http": result.get('playback_url', '')
+                    "url": result.get('playback_url', '')
                 }
             }
         else:
@@ -351,7 +356,7 @@ async def get_stream_url(device_id: str, protocol: str = "rtsp", stream_type: st
         device_id: 设备ID
         protocol: 协议类型（rtsp/http，默认rtsp）
         stream_type: 流类型（main/sub，默认main）
-        headers: 请求头信息（由FastMCP框架自动传入）
+        headers: 请求头信息
     
     Returns:
         dict: 视频流地址和相关信息
