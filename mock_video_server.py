@@ -235,20 +235,14 @@ async def get_devices(
     # 返回结果，确保包含所有必要字段，特别是device_id和ip_address
     enhanced_devices = []
     for device in filtered_devices:
-        # 确保每个设备对象都包含device_id和ip_address字段
+        # 只返回设备的概要信息
         enhanced_device = {
             "device_id": device.get("device_id", ""),
             "ip_address": device.get("ip_address", ""),
             "name": device.get("name", ""),
             "type": device.get("type", ""),
             "status": device.get("status", ""),
-            "location": device.get("location", ""),
-            "model": device.get("model", ""),
-            "resolution": device.get("resolution", ""),
-            "last_online": device.get("last_online", ""),
-            "manufacturer": device.get("manufacturer", ""),
-            # 包含其他所有原始字段
-            **device
+            "location": device.get("location", "")
         }
         enhanced_devices.append(enhanced_device)
     

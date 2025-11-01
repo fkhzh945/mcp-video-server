@@ -203,8 +203,8 @@ async def get_video_devices(device_type=None, status=None, keyword=None, headers
     """获取视频设备列表
     
     Args:
-        device_type: 设备类型过滤（可选）
-        status: 设备状态过滤（可选）
+        device_type: 设备类型过滤（可选），取值为ip_camera、nvr
+        status: 设备状态过滤（可选），取值为在线用online或离线用offline
         keyword: 关键词搜索（可选）
         headers: 请求头信息（由FastMCP框架自动传入）
     
@@ -470,7 +470,7 @@ def start_server(port=None, protocol=None):
         if protocol == 'stdio':
             mcp = FastMCP("video_server")
         else:
-            mcp = FastMCP("video_server", port=port)
+            mcp = FastMCP("video_server", port=port, host="0.0.0.0")
         # Register all tools with the new instance
         register_tools()
         
@@ -780,7 +780,7 @@ Examples:
         if current_protocol == 'stdio':
             mcp = FastMCP("video_server")
         else:
-            mcp = FastMCP("video_server", port=current_port)
+            mcp = FastMCP("video_server", port=current_port, host="0.0.0.0")
         # Register all tools with the MCP instance
         register_tools(verbose=not args.json)      
             
